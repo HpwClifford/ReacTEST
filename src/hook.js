@@ -4,6 +4,7 @@
 /* eslint-disable no-underscore-dangle */
 function hook() {
   const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+  console.log('hooked in');
   devTools.onCommitFiberRoot = (function (original) {
     return function (...args) {
       const fiberDOM = args[1];
