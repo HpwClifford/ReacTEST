@@ -4,7 +4,6 @@
 /* eslint-disable no-underscore-dangle */
 function hook() {
   const devTools = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-  console.log('hooked in');
   devTools.onCommitFiberRoot = (function (original) {
     return function (...args) {
       const fiberDOM = args[1];
@@ -34,14 +33,21 @@ function recurse(node, parentArr) {
       component.name = node.type.name;
     } else {
       // this is an html element
+      // continue traversal without adding to data obj
       if (node.child) recurse(node.child, parentArr);
       if (node.sibling) recurse(node.sibling, parentArr);
       return;
     }
+  } else {
+    // this is a misc fiber node
+    // continue traversal without adding to data obj
+    if (node.child) recurse(node.child, parentArr);
+    if (node.sibling) recurse(node.sibling, parentArr);
+    return;
   }
 
   // get state
-  if (node.memoizedState) component.state = node.memoizedState;
+  if (node.memoizedState) component.state = node.memoizedState.memoizedState;
 
   // get props
   if (node.memoizedProps) component.props = node.memoizedProps;

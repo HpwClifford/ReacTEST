@@ -5,19 +5,15 @@ import Orange from './Orange.jsx';
 const FruitContainer = () => {
   const [apples, setApples] = useState([]);
 
-  console.log('apples', apples);
+  const addApple = () => {
+    const newApples = apples.slice();
+    newApples.push(<Apple key={apples.length} appleKey={apples.length} />);
+    setApples(newApples);
+  };
 
   return (
     <div>
-      <button
-        onClick={() => {
-          const newApples = apples.slice();
-          newApples.push(<Apple key={apples.length} />);
-          setApples(newApples);
-        }}
-      >
-        ADD APPLE
-      </button>
+      <button onClick={addApple}>ADD APPLE</button>
       {apples}
       <Orange />
     </div>
