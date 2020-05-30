@@ -11,11 +11,20 @@ const FruitContainer = () => {
     setApples(newApples);
   };
 
+  const [oranges, setOranges] = useState([]);
+
+  const addOrange = () => {
+    const newOranges = oranges.slice();
+    newOranges.push(<Orange key={oranges.length} appleKey={oranges.length} />);
+    setOranges(newOranges);
+  };
+
   return (
     <div>
       <button onClick={addApple}>ADD APPLE</button>
+      <button onClick={addOrange}>ADD ORANGE</button>
       {apples}
-      <Orange />
+      {oranges}
     </div>
   );
 };

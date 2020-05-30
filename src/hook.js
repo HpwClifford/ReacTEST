@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-use-before-define */
 /* eslint-disable wrap-iife */
 /* eslint-disable func-names */
@@ -16,16 +17,22 @@ function hook() {
   })(devTools.onCommitFiberRoot);
 }
 
+// recursion for state linked list
+function getState(stateNode, arr) {
+  //   arr.push('something');
+  arr.push(stateNode.memoizedState);
+  if (stateNode.next) getState(stateNode.next, arr);
+}
+
+// TODO: write conditions and separate funcs for class and functional components
 function recurse(node, parentArr) {
   const component = {
     name: '',
     children: [],
     state: null,
     props: null,
-    node,
+    // node,
   };
-
-  // console.log('stepped', node);
 
   // get name
   if (node.type) {
@@ -47,10 +54,20 @@ function recurse(node, parentArr) {
   }
 
   // get state
-  if (node.memoizedState) component.state = node.memoizedState.memoizedState;
+  if (node.memoizedState) {
+    if (node.memoizedState.memoizedState) {
+      component.state = [];
+      getState(node.memoizedState, component.state);
+    } else component.state = node.memoizedState;
+  }
 
   // get props
   if (node.memoizedProps) component.props = node.memoizedProps;
+
+  // get hooks
+  if (node._debugHookTypes) {
+    component.hooks = node._debugHookTypes;
+  }
 
   component.children = [];
 
