@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-use-before-define */
-/* eslint-disable wrap-iife */
 /* eslint-disable func-names */
 /* eslint-disable no-underscore-dangle */
 function hook() {
@@ -11,27 +10,40 @@ function hook() {
       const rootNode = fiberDOM.current.stateNode.current;
       const arr = [];
       recurse(rootNode.child, arr);
-      console.log(arr[0]);
+      console.log(arr);
+      // sendToServer(arr);
       return original(...args);
     };
   })(devTools.onCommitFiberRoot);
+}
+
+function sendToServer(arr) {
+  fetch('/receive', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(arr),
+  });
 }
 
 // recursion for state linked list
 function getState(stateNode, arr) {
   //   arr.push('something');
   arr.push(stateNode.memoizedState);
-  if (stateNode.next) getState(stateNode.next, arr);
+  if (stateNode.next && stateNode.next.memoizedState.tag !== 5)
+    // ^^^
+    // DEFINITELY CHECK THIS OUT
+    getState(stateNode.next, arr);
 }
 
 // TODO: write conditions and separate funcs for class and functional components
 function recurse(node, parentArr) {
   const component = {
     name: '',
-    children: [],
     state: null,
     props: null,
-    // node,
+    node,
   };
 
   // get name
@@ -54,26 +66,28 @@ function recurse(node, parentArr) {
   }
 
   // get state
-  if (node.memoizedState) {
-    if (node.memoizedState.memoizedState) {
-      component.state = [];
-      getState(node.memoizedState, component.state);
-    } else component.state = node.memoizedState;
-  }
+  if (node.memoizedState && node.memoizedState.memoizedState) {
+    component.state = [];
+    getState(node.memoizedState, component.state);
+  } else component.state = node.memoizedState;
 
   // get props
   if (node.memoizedProps) component.props = node.memoizedProps;
 
   // get hooks
-  if (node._debugHookTypes) {
-    component.hooks = node._debugHookTypes;
-  }
+  if (node._debugHookTypes) component.hooks = node._debugHookTypes;
 
-  component.children = [];
+  if (component.name === 'App') component.state = null;
 
   parentArr.push(component);
-  if (node.child) recurse(node.child, component.children);
+  if (node.child) {
+    component.children = [];
+    recurse(node.child, component.children);
+  }
   if (node.sibling) recurse(node.sibling, parentArr);
+
+  // remove children arr if none added in recursion
+  if (component.children.length === 0) delete component.children;
 }
 
 module.exports = hook;

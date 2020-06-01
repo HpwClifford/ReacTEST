@@ -23,4 +23,12 @@ module.exports = {
       template: 'src/index.html',
     }),
   ],
+  devServer: {
+    historyApiFallback: true,
+    contentBase: path.join(__dirname, 'dist'),
+    proxy: {
+      '/receive': 'http://localhost:3000/',
+    },
+    hot: true,
+  },
 };

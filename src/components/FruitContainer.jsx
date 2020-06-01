@@ -7,7 +7,7 @@ const FruitContainer = () => {
 
   const addApple = () => {
     const newApples = apples.slice();
-    newApples.push(<Apple key={apples.length} appleKey={apples.length} />);
+    newApples.push(true);
     setApples(newApples);
   };
 
@@ -19,11 +19,19 @@ const FruitContainer = () => {
     setOranges(newOranges);
   };
 
+  //   const appleList = apples.map((apple, idx) => (
+  //     <Apple key={idx} appleKey={idx} />
+  //   ));
+
+  //   console.log(appleList);
+
   return (
     <div>
       <button onClick={addApple}>ADD APPLE</button>
       <button onClick={addOrange}>ADD ORANGE</button>
-      {apples}
+      {apples.map((apple, idx) => (
+        <Apple key={idx} appleKey={idx} />
+      ))}
       {oranges}
     </div>
   );
