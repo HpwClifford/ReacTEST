@@ -11,7 +11,7 @@ function hook() {
       const arr = [];
       recurse(rootNode.child, arr);
       console.log(arr);
-      // sendToServer(arr);
+      //   sendToServer(arr);
       return original(...args);
     };
   })(devTools.onCommitFiberRoot);
@@ -31,7 +31,8 @@ function sendToServer(arr) {
 function getState(stateNode, arr) {
   //   arr.push('something');
   arr.push(stateNode.memoizedState);
-  if (stateNode.next && stateNode.next.memoizedState.tag !== 5)
+  // && stateNode.next.memoizedState.tag !== 5
+  if (stateNode.next)
     // ^^^
     // DEFINITELY CHECK THIS OUT
     getState(stateNode.next, arr);
@@ -41,9 +42,8 @@ function getState(stateNode, arr) {
 function recurse(node, parentArr) {
   const component = {
     name: '',
-    state: null,
     props: null,
-    node,
+    // node,
   };
 
   // get name
@@ -66,10 +66,11 @@ function recurse(node, parentArr) {
   }
 
   // get state
+  // if functional component, traverse state linked list
   if (node.memoizedState && node.memoizedState.memoizedState) {
     component.state = [];
     getState(node.memoizedState, component.state);
-  } else component.state = node.memoizedState;
+  } else if (node.memoizedState) component.state = node.memoizedState;
 
   // get props
   if (node.memoizedProps) component.props = node.memoizedProps;
@@ -77,7 +78,7 @@ function recurse(node, parentArr) {
   // get hooks
   if (node._debugHookTypes) component.hooks = node._debugHookTypes;
 
-  if (component.name === 'App') component.state = null;
+  //   if (component.name === 'App') component.state = null;
 
   parentArr.push(component);
   if (node.child) {
