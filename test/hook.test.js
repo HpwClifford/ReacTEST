@@ -2,5 +2,5 @@
 const test = '15';
 
 it('test works', () => {
-  expect(test).toBe('15');
+  expect(test).toBe('16');
 });

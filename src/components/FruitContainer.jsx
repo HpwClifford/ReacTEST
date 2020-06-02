@@ -30,7 +30,7 @@ const FruitContainer = () => {
       <button onClick={addApple}>ADD APPLE</button>
       <button onClick={addOrange}>ADD ORANGE</button>
       {apples.map((apple, idx) => (
-        <Apple key={idx} appleKey={idx} />
+        <Apple key={idx} appleKey={idx} test={3} />
       ))}
       {oranges}
     </div>
