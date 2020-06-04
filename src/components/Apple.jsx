@@ -3,10 +3,10 @@ import Core from './Core.jsx';
 
 const Apple = ({ appleKey }) => {
   return (
-    <p>
+    <div>
       APPLE:
       <Core coreKey={appleKey + 1} />
-    </p>
+    </div>
   );
 };
 

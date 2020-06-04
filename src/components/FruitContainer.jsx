@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import Apple from './Apple.jsx';
-import Orange from './Orange.jsx';
+import React, { useState } from "react";
+import Apple from "./Apple.jsx";
+import Orange from "./Orange.jsx";
+import Banana from "./Banana.jsx";
 
 const FruitContainer = () => {
   const [apples, setApples] = useState([]);
@@ -19,20 +20,28 @@ const FruitContainer = () => {
     setOranges(newOranges);
   };
 
-  //   const appleList = apples.map((apple, idx) => (
-  //     <Apple key={idx} appleKey={idx} />
-  //   ));
+  const [bananas, setBananas] = useState({ bananaCount: 0 });
 
-  //   console.log(appleList);
+  const bananArr = [];
+  for (let k = 0; k < bananas.bananaCount; k++) {
+    bananArr[k] = <Banana bananaNum={k} key={k} />;
+  }
+
+  const addBanana = () => {
+    setBananas({ bananaCount: bananas.bananaCount + 1 });
+  };
 
   return (
     <div>
       <button onClick={addApple}>ADD APPLE</button>
       <button onClick={addOrange}>ADD ORANGE</button>
+      <button onClick={addBanana}>ADD BANANANANA</button>
+
       {apples.map((apple, idx) => (
         <Apple key={idx} appleKey={idx} test={3} />
       ))}
       {oranges}
+      {bananArr}
     </div>
   );
 };
