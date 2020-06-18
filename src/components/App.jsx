@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainContainer from './MainContainer.jsx';
 
 const App = () => {
+  const [testState, setTestState] = useState(null);
   return <MainContainer />;
 };
 
